@@ -1,0 +1,42 @@
+# Class Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Maven files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# NetBeans specific #
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+nb-configuration.xml
+nbactions.xml
+
+# jetBrains specific #
+*/.idea/**
+.idea/**
+*.iml
+*.ipr
+
+# OSX files
+._*
+._*/
+.DS_Store
+.DS_*/
+
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!/.mvn/wrapper/maven-wrapper.jar
