@@ -72,8 +72,7 @@ public class Matrix extends AMatrix {
     Future[] calculatorFutures = new Future[threadCount];
 
     for (int threadIndex = threadCount - 1; threadIndex >= 0; --threadIndex) {
-
-      int lastIndex = firstIndex + cellsForThread;  // Индекс последней вычисляемой ячейки.
+      int lastIndex = firstIndex + cellsForThread;
 
       if (threadIndex == 0) {
         /**
