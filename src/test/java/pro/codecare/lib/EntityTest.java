@@ -67,7 +67,7 @@ public class EntityTest {
     Assert.assertNotNull(matrix);
 
     try (final FileWriter fileWriter = new FileWriter("testOutput "+matrix.toString()+".log", false)) {
-      fileWriter.write("\tDefault constuctor matrix:\n");
+      fileWriter.write("\tDefault constructor matrix:\n");
       matrix.Output(fileWriter);
       System.out.println("Default matrix "+matrix.toString()+" is flushed to file stream");
     }

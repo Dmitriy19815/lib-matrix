@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public abstract class AMatrix implements Serializable {
   private static final long serialVersionUID = 1L;
-  protected static final int bound = 99;
+  protected static final int bound = 999;
   protected static String _ERR_MSG_1 = "You have to pass sizes of matrix like positive values";
   protected static String _ERR_MSG_2 = "The number of columns in the first matrix and the number of rows in the second matrix must coincide";
   protected Long id;
@@ -54,7 +54,7 @@ public abstract class AMatrix implements Serializable {
         if (clear)
           this.values[row][col] = 0;
         else
-          this.values[row][col] = 1 + random.nextInt(bound);
+          this.values[row][col] = 1 + random.nextInt(bound) - (bound/2);
   }
 
   /**
@@ -105,6 +105,7 @@ public abstract class AMatrix implements Serializable {
    *
    * @param firstLeft     First source matrix object
    * @param secondRight   Second source matrix object
+   * @param type          Type (or kind) of algorithm for call
    */
   public abstract void MultiplicationConcurrent(AMatrix firstLeft, AMatrix secondRight, int type);
 
