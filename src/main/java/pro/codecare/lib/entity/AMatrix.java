@@ -1,6 +1,5 @@
 package pro.codecare.lib.entity;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -8,27 +7,29 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- *
+ * Abstract parent class with simple Matrix utilities for calculation of multiplication for two matrix.
+ * Works properly for rectangular matrix.
  */
 public abstract class AMatrix implements Serializable {
   private static final long serialVersionUID = 1L;
-
+  protected static final int bound = 99;
   protected static String _ERR_MSG_1 = "You have to pass sizes of matrix like positive values";
-  // "Число столбцов первой матрицы и число строк второй матрицы должны совпадать";
   protected static String _ERR_MSG_2 = "The number of columns in the first matrix and the number of rows in the second matrix must coincide";
-
   protected Long id;
-  // protected Integer rows;
-  // protected Integer columns;
   protected int[][] values;
 
+  /**
+   * Constructor method of matrix object with with defined dimensions
+   * Also fills the new matrix by random integer numbers
+   *
+   * @param rowCount
+   * @param columnCount
+   */
   public AMatrix(int rowCount, int columnCount) {
     if ((rowCount <= 0) | (columnCount <= 0)) {
       throw new NegativeArraySizeException(_ERR_MSG_1);
     }
     this.id = System.currentTimeMillis();
-    // this.rows = 0;
-    // this.columns = 0;
     InitializeMatrix(rowCount, columnCount, false);
   }
 
@@ -38,31 +39,43 @@ public abstract class AMatrix implements Serializable {
   }
 
   /**
-   * Initialized and filled matrix by random integer numbers
+   * Makes initialize of matrix with defined dimensions
+   * Also fills the new matrix by integer numbers depend on value of flag
+   *
+   * @param rowsCount
+   * @param columnsCount
+   * @param clear
    */
   private void InitializeMatrix(int rowsCount, int columnsCount, boolean clear) {
     this.values = new int[rowsCount][columnsCount];
     Random random = new Random();
-
     for (int row = 0; row < values.length; ++row)
       for (int col = 0; col < values[row].length; ++col)
         if (clear)
           this.values[row][col] = 0;
         else
-          this.values[row][col] = 1 + random.nextInt(99);
+          this.values[row][col] = 1 + random.nextInt(bound);
   }
 
+  /**
+   * Makes resize of matrix with defined dimensions
+   * Also fills the new matrix by zero integer numbers
+   *
+   * @param rowsCount
+   * @param columnsCount
+   */
   protected void ResizeMatrix(int rowsCount, int columnsCount) {
-    if (this.values != null) {
+    if (this.values != null)
       this.values = null;
-    }
-    // this.values = new int[rowsCount][columnsCount];
     InitializeMatrix(rowsCount, columnsCount, true);
   }
 
   /**
-   * Default implementation of algorithm for calculate of two matrix
+   * Default implementation of algorithm for calculate of two matrix.
    * Have to be used for checking results of other implementations
+   *
+   * @param firstLeft     First source matrix object
+   * @param secondRight   Second source matrix object
    */
   public void Multiplication(AMatrix firstLeft, AMatrix secondRight) {
     if (firstLeft.getColumns() != secondRight.getRows()) {
@@ -87,27 +100,31 @@ public abstract class AMatrix implements Serializable {
     }
   }
 
+  /**
+   * Abstract method for the concurrent implementation in inherits
+   *
+   * @param firstLeft     First source matrix object
+   * @param secondRight   Second source matrix object
+   */
   public abstract void MultiplicationConcurrent(AMatrix firstLeft, AMatrix secondRight, int type);
 
   /**
-   * Вывод содержимого матрицы в поток вывода
-   * Производится выравнивание значений для лучшего восприятия.
+   * Output of matrix content to the output stream;
+   * Aligns the values for better perception.
    *
-   * @param  stream       Потоковый объект, представляющий собой файл для записи
+   * @param  stream       Object (file etc.) for output
    * @throws IOException
    */
   public void Output(Writer stream) throws IOException {
-    boolean hasNegative = false;  // Признак наличия в матрице отрицательных чисел.
-    int maxValue = 0;      // Максимальное по модулю число в матрице.
+    boolean hasNegative = false;
+    int maxValue = 0;
 
-    // Цикл по строкам матрицы.
+    // Checking values before output
     for (final int[] row : this.getValues()) {
-      // Цикл по столбцам матрицы.
-      for (final int element : row) {
-        int temp = element;
+      for (final int item : row) {
+        int temp = item;
 
-        // Вычисляем максимальное по модулю число в матрице и проверяем на наличие отрицательных чисел.
-        if (element < 0) {
+        if (item < 0) {
           hasNegative = true;
           temp = -temp;
         }
@@ -116,20 +133,19 @@ public abstract class AMatrix implements Serializable {
       }
     }
 
-    // Вычисление длины позиции под число.
-    int len = Integer.toString(maxValue).length() + 1;  // Одно знакоместо под разделитель (пробел).
+    // Prepare to output
+    int len = Integer.toString(maxValue).length() + 1;
     if (hasNegative)
-      ++len;  // Если есть отрицательные, добавляем знакоместо под минус.
+      ++len;
 
-    // Вывод элементов матрицы в файл.
-    for (final int[] row : this.getValues()) {  // Цикл по строкам матрицы.
+    // Output matrix to stream
+    for (final int[] row : this.getValues()) {
+      for (final int item : row)
+        // builds pretty format output String for matrix element
+        stream.write(String.format("%"+len+"d", item));
 
-      // Цикл по столбцам матрицы
-      for (final int element : row)
-        // Построение строки в формате вывода
-        stream.write(String.format("%"+len+"d", element));
-
-      stream.write("\n");  // Разделяем строки матрицы переводом строки.
+      // add empty line separator
+      stream.write("\n");
     }
   }
 
@@ -137,21 +153,35 @@ public abstract class AMatrix implements Serializable {
     this.values = values;
   }
 
+  /**
+   * The actual matrix values in 2D-array format
+   *
+   * @return Actual matrix values 2D-array or empty array
+   *          in case of empty matrix object
+   */
   public int[][] getValues() {
     return this.values != null
             ? this.values
             : new int[0][0];
   }
 
+  /**
+   * The number of rows is calculated from the actual matrix of the object
+   *
+   * @return Actual number or zero number in case of empty matrix object
+   */
   public Integer getRows() {
-    // Число строк вычисляется исходя из матрицы объекта
     return (this.values != null)
       ? Integer.valueOf(this.values.length)
       : 0;
   }
 
+  /**
+   * The number of columns is calculated from the actual matrix of the object
+   *
+   * @return Actual number or zero number in case of empty matrix object
+   */
   public Integer getColumns() {
-    // Число стобцов вычисляется исходя из матрицы объекта
     return (this.values != null)
       ? Integer.valueOf(this.values[0].length)
       : 0;

@@ -5,7 +5,8 @@ import pro.codecare.lib.Matrix;
 import java.util.concurrent.Callable;
 
 /**
- *
+ * Class for concurrent implementation.
+ * Used in the method of asynchronous implementation of the calculation algorithm
  */
 public class MultiplierAsync implements Callable {
   private int[][] first;
@@ -24,10 +25,15 @@ public class MultiplierAsync implements Callable {
     this.lastIndex = endBound;
   }
 
+  /**
+   * The executed body of thread.
+   *
+   * @return Object with value of calculated items in this thread
+   * @throws Exception
+   */
   @Override
   public Object call() throws Exception {
     System.out.println("Calculating cells from " + firstIndex + " to " + lastIndex + " in callable task...");
-    // Число столбцов результирующей матрицы
     int columnsCount = second[0].length;
 
     for (int index = firstIndex; index < lastIndex; ++index) {

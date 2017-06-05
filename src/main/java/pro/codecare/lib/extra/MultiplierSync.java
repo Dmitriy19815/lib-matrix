@@ -3,7 +3,8 @@ package pro.codecare.lib.extra;
 import pro.codecare.lib.Matrix;
 
 /**
- *
+ * Class for concurrent implementation.
+ * Used in the method of synchronous implementation of the calculation algorithm
  */
 public class MultiplierSync implements Runnable {
   private int[][] first;
@@ -22,6 +23,9 @@ public class MultiplierSync implements Runnable {
     this.lastIndex = endBound;
   }
 
+  /**
+   * The executed body of thread.
+   */
   @Override
   public void run() {
     try {
@@ -43,8 +47,7 @@ public class MultiplierSync implements Runnable {
 
         System.out.println("Calculating cells from " + firstIndex + " to " + lastIndex + " finished");
       }
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       System.err.println(e.toString());
       Thread.currentThread().interrupt();
     }

@@ -1,5 +1,5 @@
 /**
- * Unit cases tests to show how Matrix utility logic works
+ * Unit cases tests to show how is Matrix utilities works.
  *
  * @author Dmytro Farafonov
  */
